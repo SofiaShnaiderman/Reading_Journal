@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" th:href="@{index.css}" href="../static/index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+          rel="stylesheet">
+</head>
+<body>
+<div class="header">Reading Journal</div>
+<div class="message">
+    <span>👋</span>Hi, this is Reading Journal. You can store books from <a href="https://www.goodreads.com/book/show" target="_blank">GoodReads</a> website. Choose your book there and put url to add book here.
+</div>
+<div class="error" th:hidden="${error_msg == null}">
+    <span th:text="${error_msg} ? ${error_msg} : 'Cannot find book'">Something wen wrong</span>. Try again
+</div>
+<div class="content">
+    <div class="box first-box">
+        <div class="top">
+            <div class="title">Want to read</div>
+            <a class="download" href="/download/1">📥️</a>
+        </div>
+        <div class="books">
+            <a class="book" th:each="book1: ${list1}" th:href="'/books?id=' + ${book1.id}">
+                <div class="name" th:text="${book1.name}">Pride and Prejudice</div>
+                <div class="author" th:text="${book1.author}">Jane Austen</div>
+                <div class="pages"><span th:text="${book1.pages}"></span> pages</div>
+                <div class="btns">
+                    <form th:action="'/delete?id=' + ${book1.id}" method="post">
+                        <input class="btn remove" type="submit" value="Remove">
+                    </form>
+                    <form th:action="'/start?id=' + ${book1.id}" method="post">
+                        <input class="btn start" type="submit" value="Start reading">
+                    </form>
+                </div>
+            </a>
+        </div>
+        <div class="add" onclick="toggleAdd()" id="plus-btn">
+            +
+        </div>
+        <form class="new-book" id="add-form" action="/add" method="post">
+            <div class="url">Input url to book page:</div>
+            <input type="text" class="input-url" name="url">
+            <div class="form-btn">
+                <button type="button" class="cancel-btn" onclick="toggleAdd()">Cancel</button>
+                <input type="submit" class="btn add-btn" value="Add new book">
+            </div>
+        </form>
+    </div>
+    <div class="box second-box">
+        <div class="top">
+            <div class="title">Reading</div>
+            <a class="download" href="/download/2">📥️</a>
+        </div>
+        <div class="books">
+            <a class="book" th:each="book2: ${list2}" th:href="'/books?id=' + ${book2.id}">
+                <div class="name" th:text="${book2.name}">Pride and Prejudice</div>
+                <div class="author" th:text="${book2.author}">Jane Austen</div>
+                <div class="pages"><span th:text="${book2.pages}"></span> pages</div>
+                <div class="btns">
+                    <form th:action="'/delete?id=' + ${book2.id}" method="post">
+                        <input class="btn remove" type="submit" value="Remove">
+                    </form>
+                    <form th:action="'/finish?id=' + ${book2.id}" method="post">
+                        <input class="btn finish" type="submit" value="Finish reading">
+                    </form>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="box third-box">
+        <div class="top">
+            <div class="title">Already read</div>
+            <a class="download" href="/download/3">📥️</a>
+        </div>
+        <div class="books">
+            <a class="book" th:each="book3: ${list3}" th:href="'/books?id=' + ${book3.id}">
+                <div class="name" th:text="${book3.name}">Pride and Prejudice</div>
+                <div class="author" th:text="${book3.author}">Jane Austen</div>
+                <div class="pages"><span th:text="${book3.pages}"></span> pages</div>
+                <div class="btns">
+                    <form th:action="'/delete?id=' + ${book3.id}" method="post">
+                        <input class="btn remove" type="submit" value="Remove">
+                    </form>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById('add-form').style.display = 'none';
+    });
+
+    function toggleAdd() {
+        let plusBtn = document.getElementById('plus-btn');
+        let form = document.getElementById('add-form');
+
+        if (plusBtn.style.display === 'none') {
+            plusBtn.style.display = 'flex';
+            form.style.display = 'none';
+        } else {
+            plusBtn.style.display = 'none';
+            form.style.display = 'block';
+        }
+    }
+</script>
+</body>
+</html>
